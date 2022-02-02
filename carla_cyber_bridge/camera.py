@@ -67,18 +67,27 @@ class Camera(Sensor):
         else:
             self._build_camera_info()
 
-        self.camera_info_writer = node.new_writer("/apollo/sensor/camera/front/camera_info",
+        self.camera_info_writer = node.new_writer(self.get_topic_prefix() + "/camera_info",
                                                   CameraInfo,
                                                   qos_depth=10)
-        self.camera_image_writer = node.new_writer("/apollo/sensor/camera/front/image",
+        self.camera_image_writer = node.new_writer(self.get_topic_prefix() + "/image",
                                                    Image,
                                                    qos_depth=10)
-        self.camera_compressed_image_writer = node.new_writer("/apollo/sensor/camera/front/image/compressed",
+        self.camera_compressed_image_writer = node.new_writer(self.get_topic_prefix() + "/image/compressed",
                                                               CompressedImage,
                                                               qos_depth=10)
 
     def destroy(self):
         super(Camera, self).destroy()
+
+    def get_topic_prefix(self):
+        """
+        get the topic name of the current entity.
+
+        :return: the final topic name of this object
+        :rtype: string
+        """
+        return "/apollo/sensor/camera/" + self.name
 
     def _build_camera_info(self):
         """

@@ -50,7 +50,7 @@ class Lidar(Sensor):
                                     carla_actor=carla_actor,
                                     synchronous_mode=synchronous_mode)
 
-        self.lidar_writer = node.new_writer("/apollo/sensor/lidar32/PointCloud2",
+        self.lidar_writer = node.new_writer(self.get_topic_prefix() + "/compensator/PointCloud2",
                                             PointCloud,
                                             qos_depth=10)
         self.listen()
@@ -58,6 +58,15 @@ class Lidar(Sensor):
     def destroy(self):
         super(Lidar, self).destroy()
         self.node.destroy_writer(self.lidar_writer)
+
+    def get_topic_prefix(self):
+        """
+        get the topic name of the current entity.
+
+        :return: the final topic name of this object
+        :rtype: string
+        """
+        return "/apollo/sensor/" + self.name
 
     # pylint: disable=arguments-differ
     def sensor_data_updated(self, carla_lidar_measurement):
