@@ -49,10 +49,10 @@ class LaneInvasionSensor(Sensor):
                                                  synchronous_mode=synchronous_mode,
                                                  is_event_sensor=True)
 
-        self.lane_invasion_writer = node.new_writer(self.get_topic_prefix(),
-                                                    CarlaLaneInvasionEvent,
-                                                    qos_depth=10)
-        self.listen()
+        # self.lane_invasion_writer = node.new_writer(self.get_topic_prefix(),
+        #                                             CarlaLaneInvasionEvent,
+        #                                             qos_depth=10)
+        # self.listen()
 
     def destroy(self):
         super(LaneInvasionSensor, self).destroy()
@@ -65,8 +65,9 @@ class LaneInvasionSensor(Sensor):
         :param lane_invasion_event: carla lane invasion event object
         :type lane_invasion_event: carla.LaneInvasionEvent
         """
-        lane_invasion_msg = CarlaLaneInvasionEvent()
-        lane_invasion_msg.header = self.get_msg_header(timestamp=lane_invasion_event.timestamp)
-        for marking in lane_invasion_event.crossed_lane_markings:
-            lane_invasion_msg.crossed_lane_markings.append(marking.type)
-        self.lane_invasion_writer.write(lane_invasion_msg)
+        pass
+        # lane_invasion_msg = CarlaLaneInvasionEvent()
+        # lane_invasion_msg.header = self.get_msg_header(timestamp=lane_invasion_event.timestamp)
+        # for marking in lane_invasion_event.crossed_lane_markings:
+        #     lane_invasion_msg.crossed_lane_markings.append(marking.type)
+        # self.lane_invasion_writer.write(lane_invasion_msg)

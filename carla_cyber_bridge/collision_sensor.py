@@ -49,10 +49,10 @@ class CollisionSensor(Sensor):
                                               synchronous_mode=synchronous_mode,
                                               is_event_sensor=True)
 
-        self.collision_writer = node.new_writer(self.get_topic_prefix(),
-                                                CarlaCollisionEvent,
-                                                qos_depth=10)
-        self.listen()
+        # self.collision_writer = node.new_writer(self.get_topic_prefix(),
+        #                                         CarlaCollisionEvent,
+        #                                         qos_depth=10)
+        # self.listen()
 
     def destroy(self):
         super(CollisionSensor, self).destroy()
