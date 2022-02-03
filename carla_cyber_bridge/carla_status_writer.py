@@ -36,7 +36,7 @@ class CarlaStatusWriter(object):
         self.write()
 
     def destroy(self):
-        self.node.destroy_writer(self.carla_status_writer)
+        pass
 
     def write(self):
         """

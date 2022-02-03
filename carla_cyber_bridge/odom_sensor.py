@@ -33,7 +33,7 @@ class OdometrySensor(PseudoActor):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         """
 
         super(OdometrySensor, self).__init__(uid=uid,
@@ -47,7 +47,6 @@ class OdometrySensor(PseudoActor):
 
     def destroy(self):
         super(OdometrySensor, self).destroy()
-        self.node.destroy_writer(self.odometry_writer)
 
     @staticmethod
     def get_blueprint_name():

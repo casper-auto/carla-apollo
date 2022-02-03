@@ -69,8 +69,6 @@ class Gnss(Sensor):
 
     def destroy(self):
         super(Gnss, self).destroy()
-        self.node.destroy_writer(self.gnss_status_writer)
-        self.node.destroy_writer(self.gnss_odometry_writer)
 
     def get_topic_prefix(self):
         """

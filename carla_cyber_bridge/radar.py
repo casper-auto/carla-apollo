@@ -55,7 +55,6 @@ class Radar(Sensor):
 
     def destroy(self):
         super(Radar, self).destroy()
-        self.node.destroy_writer(self.radar_writer)
 
     def get_topic_prefix(self):
         """

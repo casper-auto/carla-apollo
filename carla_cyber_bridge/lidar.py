@@ -57,7 +57,6 @@ class Lidar(Sensor):
 
     def destroy(self):
         super(Lidar, self).destroy()
-        self.node.destroy_writer(self.lidar_writer)
 
     def get_topic_prefix(self):
         """
@@ -147,7 +146,6 @@ class SemanticLidar(Sensor):
 
     def destroy(self):
         super(SemanticLidar, self).destroy()
-        self.node.destroy_writer(self.semantic_lidar_writer)
 
     # pylint: disable=arguments-differ
     def sensor_data_updated(self, carla_lidar_measurement):

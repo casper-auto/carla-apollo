@@ -54,7 +54,6 @@ class ObjectSensor(PseudoActor):
         """
         super(ObjectSensor, self).destroy()
         self.actor_list = None
-        self.node.destroy_writer(self.object_writer)
 
     @staticmethod
     def get_blueprint_name():

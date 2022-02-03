@@ -33,7 +33,7 @@ class ActorListSensor(PseudoActor):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         :param actor_list: current list of actors
         :type actor_list: map(carla-actor-id -> python-actor-object)
         """
@@ -54,7 +54,6 @@ class ActorListSensor(PseudoActor):
         """
         super(ActorListSensor, self).destroy()
         self.actor_list = None
-        self.node.destroy_writer(self.actor_list_writer)
 
     @staticmethod
     def get_blueprint_name():

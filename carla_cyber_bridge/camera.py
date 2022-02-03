@@ -423,7 +423,6 @@ class DVSCamera(Camera):
 
     def destroy(self):
         super(DVSCamera, self).destroy()
-        # self.node.destroy_writer(self.dvs_camera_writer)
 
     def sensor_data_updated(self, carla_dvs_event_array):
         """

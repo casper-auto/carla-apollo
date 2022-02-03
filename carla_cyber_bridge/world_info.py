@@ -47,7 +47,6 @@ class WorldInfo(object):
 
         :return:
         """
-        self.node.destroy_writer(self.world_info_writer)
         self.carla_map = None
 
     def update(self, frame, timestamp):

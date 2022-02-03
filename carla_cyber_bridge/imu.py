@@ -54,7 +54,6 @@ class ImuSensor(Sensor):
 
     def destroy(self):
         super(ImuSensor, self).destroy()
-        self.node.destroy_writer(self.imu_writer)
 
     def get_topic_prefix(self):
         """

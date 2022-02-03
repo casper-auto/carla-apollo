@@ -231,12 +231,7 @@ class EgoVehicle(Vehicle):
         :return:
         """
         self.node.logdebug("Destroy Vehicle(id={})".format(self.get_id()))
-        self.node.destroy_reader(self.control_reader)
-        self.node.destroy_reader(self.enable_autopilot_reader)
-        self.node.destroy_writer(self.vehicle_chassis_writer)
-        self.node.destroy_writer(self.vehicle_info_writer)
-        self.node.destroy_writer(self.vehicle_pose_writer)
-        Vehicle.destroy(self)
+        super(EgoVehicle, self).destroy()
 
     def control_command_override(self, enable):
         """

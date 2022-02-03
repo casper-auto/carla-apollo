@@ -56,7 +56,6 @@ class LaneInvasionSensor(Sensor):
 
     def destroy(self):
         super(LaneInvasionSensor, self).destroy()
-        self.node.destroy_writer(self.lane_invasion_writer)
 
     def sensor_data_updated(self, lane_invasion_event):
         """

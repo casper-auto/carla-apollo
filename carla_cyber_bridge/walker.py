@@ -61,7 +61,6 @@ class Walker(TrafficParticipant):
         :return:
         """
         super(Walker, self).destroy()
-        self.node.destroy_reader(self.control_reader)
 
     def control_command_updated(self, ros_walker_control):
         """

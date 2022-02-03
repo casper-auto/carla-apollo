@@ -65,8 +65,6 @@ class TrafficLightsSensor(PseudoActor):
         """
         super(TrafficLightsSensor, self).destroy()
         self.actor_list = None
-        self.node.destroy_writer(self.traffic_lights_info_writer)
-        self.node.destroy_writer(self.traffic_lights_status_writer)
 
     @staticmethod
     def get_blueprint_name():

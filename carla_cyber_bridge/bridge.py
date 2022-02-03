@@ -40,6 +40,7 @@ from carla_cyber_bridge.world_info import WorldInfo
 
 from cyber_py import cyber
 from cyber.carla_bridge.carla_proto.proto.carla_clock_pb2 import Time, Clock
+from cyber.carla_bridge.carla_proto.proto.carla_control_pb2 import CarlaControl
 from cyber.carla_bridge.carla_proto.proto.carla_spawn_object_pb2 import (
     SpawnObjectRequest,
     SpawnObjectResponse
@@ -143,12 +144,12 @@ class CarlaCyberBridge(CompatibleNode):
         if self.sync_mode:
             self.logdebug("In sync mode statement.")
 
-            # self.carla_run_state = CarlaControl.PLAY
+            self.carla_run_state = CarlaControl.Command.PLAY
 
-            # self.carla_control_reader = \
-            #     self.new_reader(CarlaControl, "/carla/control",
-            #                           lambda control: self.carla_control_queue.put(control.command),
-            #                           qos_depth=10, callback_group=self.callback_group)
+            self.carla_control_reader = \
+                self.new_reader(CarlaControl, "/carla/control",
+                                      lambda control: self.carla_control_queue.put(control.command),
+                                      qos_depth=10, callback_group=self.callback_group)
 
             self.synchronous_mode_update_thread = Thread(
                 target=self._synchronous_mode_update)
@@ -204,7 +205,7 @@ class CarlaCyberBridge(CompatibleNode):
     def destroy_object(self, req):
         response = DestroyObjectResponse()
         destroyed_actors = self.actor_factory.destroy_actor(req.id)
-        response.content = ("Success" if bool(destroyed_actors) else "Failure")
+        response.success = bool(destroyed_actors)
         for actor in destroyed_actors:
             if actor in self._registered_actors:
                 self._registered_actors.remove(actor)
@@ -253,23 +254,23 @@ class CarlaCyberBridge(CompatibleNode):
         while not self.carla_control_queue.empty():
             command = self.carla_control_queue.get()
 
-        # while command is not None and cybercomp.ok():
-        #     self.carla_run_state = command
-        #
-        #     if self.carla_run_state == CarlaControl.PAUSE:
-        #         # wait for next command
-        #         self.loginfo("State set to PAUSED")
-        #         # self.status_writer.set_synchronous_mode_running(False)
-        #         command = self.carla_control_queue.get()
-        #     elif self.carla_run_state == CarlaControl.PLAY:
-        #         self.loginfo("State set to PLAY")
-        #         # self.status_writer.set_synchronous_mode_running(True)
-        #         return
-        #     elif self.carla_run_state == CarlaControl.STEP_ONCE:
-        #         self.loginfo("Execute single step.")
-        #         # self.status_writer.set_synchronous_mode_running(True)
-        #         self.carla_control_queue.put(CarlaControl.PAUSE)
-        #         return
+        while command is not None and cybercomp.ok():
+            self.carla_run_state = command
+
+            if self.carla_run_state == CarlaControl.Command.PAUSE:
+                # wait for next command
+                self.loginfo("State set to PAUSED")
+                self.status_writer.set_synchronous_mode_running(False)
+                command = self.carla_control_queue.get()
+            elif self.carla_run_state == CarlaControl.Command.PLAY:
+                self.loginfo("State set to PLAY")
+                self.status_writer.set_synchronous_mode_running(True)
+                return
+            elif self.carla_run_state == CarlaControl.Command.STEP_ONCE:
+                self.loginfo("Execute single step.")
+                self.status_writer.set_synchronous_mode_running(True)
+                self.carla_control_queue.put(CarlaControl.Command.PAUSE)
+                return
 
     def _synchronous_mode_update(self):
         """
@@ -320,7 +321,7 @@ class CarlaCyberBridge(CompatibleNode):
         :type carla_timestamp: carla.Timestamp
         :return:
         """
-        if not self.shutdown.is_set():
+        if cybercomp.ok():
             if self.timestamp_last_run < carla_snapshot.timestamp.elapsed_seconds:
                 self.timestamp_last_run = carla_snapshot.timestamp.elapsed_seconds
                 self.update_clock(carla_snapshot.timestamp)
@@ -370,20 +371,16 @@ class CarlaCyberBridge(CompatibleNode):
         :return:
         """
         self.loginfo("Shutting down...")
-        self.shutdown.set()
         if not self.sync_mode:
             if self.on_tick_id:
                 self.carla_world.remove_on_tick(self.on_tick_id)
-            self.actor_factory.thread.join()
+            # self.actor_factory.thread.join()
         else:
             self.synchronous_mode_update_thread.join()
         self.loginfo("Object update finished.")
         # self.debug_helper.destroy()
         self.status_writer.destroy()
-        self.destroy_service(self.spawn_object_service)
-        self.destroy_service(self.destroy_object_service)
-        self.destroy_reader(self.carla_weather_reader)
-        # self.carla_control_queue.put(CarlaControl.STEP_ONCE)
+        self.carla_control_queue.put(CarlaControl.Command.STEP_ONCE)
 
         for uid in self._registered_actors:
             self.actor_factory.destroy_actor(uid)
@@ -406,8 +403,6 @@ def main(args=None):
     executor = cybercomp.executors.MultiThreadedExecutor()
     carla_bridge = CarlaCyberBridge()
     executor.add_node(carla_bridge)
-
-    # cybercomp.on_shutdown(carla_bridge.destroy)
 
     config_file = os.path.dirname(__file__) + "/config/settings.yaml"
     carla_bridge.loginfo("The config file path is {}.".format(config_file))
@@ -477,12 +472,15 @@ def main(args=None):
 
     except (IOError, RuntimeError) as e:
         carla_bridge.logerr("Error: {}".format(e))
-    except KeyboardInterrupt:
-        pass
+    except KeyboardInterrupt as e:
+        carla_bridge.logerr("Error: {}".format(e))
     finally:
-        cyber.shutdown()
+        carla_bridge.logerr("Shutting down.")
+        carla_bridge.destroy()
+        cybercomp.shutdown()
         del carla_world
         del carla_client
+        os._exit(0)
 
 
 if __name__ == "__main__":

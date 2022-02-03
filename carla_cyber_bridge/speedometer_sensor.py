@@ -33,7 +33,7 @@ class SpeedometerSensor(PseudoActor):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         """
 
         super(SpeedometerSensor, self).__init__(uid=uid,
@@ -47,7 +47,6 @@ class SpeedometerSensor(PseudoActor):
 
     def destroy(self):
         super(SpeedometerSensor, self).destroy()
-        self.node.destroy_writer(self.speedometer_writer)
 
     def get_topic_prefix(self):
         """

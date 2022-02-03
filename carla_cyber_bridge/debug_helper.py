@@ -46,7 +46,6 @@ class DebugHelper(object):
         """
         self.node.logdebug("Destroy DebugHelper")
         self.debug = None
-        self.node.destroy_reader(self.marker_reader)
 
     def on_marker(self, marker_array):
         """

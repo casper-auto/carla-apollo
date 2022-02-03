@@ -68,7 +68,7 @@ class MarkerSensor(PseudoActor):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         :param actor_list: current list of actors
         :type actor_list: map(carla-actor-id -> python-actor-object)
         """
@@ -101,8 +101,6 @@ class MarkerSensor(PseudoActor):
         :return:
         """
         self.actor_list = None
-        self.node.destroy_writer(self.marker_writer)
-        self.node.destroy_writer(self.static_marker_writer)
         super(MarkerSensor, self).destroy()
 
     @staticmethod

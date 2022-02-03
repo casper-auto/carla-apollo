@@ -40,7 +40,7 @@ class ActorControl(PseudoActor):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         """
 
         super(ActorControl, self).__init__(uid=uid,
@@ -65,8 +65,6 @@ class ActorControl(PseudoActor):
 
         :return:
         """
-        self.node.destroy_reader(self.set_location_reader)
-        self.node.destroy_reader(self.twist_control_reader)
         super(ActorControl, self).destroy()
 
     @staticmethod

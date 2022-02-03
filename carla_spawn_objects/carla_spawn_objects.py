@@ -326,28 +326,28 @@ class CarlaSpawnObjects(CompatibleNode):
         try:
             # destroy vehicles sensors
             for actor_id in self.vehicles_sensors:
-                destroy_object_request = cybercomp.get_service_request(DestroyObject)
+                destroy_object_request = DestroyObjectRequest()
                 destroy_object_request.id = actor_id
                 self.call_service(self.destroy_object_service,
-                                  destroy_object_request, timeout=0.5, spin_until_response_received=True)
+                                  destroy_object_request)
                 self.loginfo("Object {} successfully destroyed.".format(actor_id))
             self.vehicles_sensors = []
 
             # destroy global sensors
             for actor_id in self.global_sensors:
-                destroy_object_request = cybercomp.get_service_request(DestroyObject)
+                destroy_object_request = DestroyObjectRequest()
                 destroy_object_request.id = actor_id
                 self.call_service(self.destroy_object_service,
-                                  destroy_object_request, timeout=0.5, spin_until_response_received=True)
+                                  destroy_object_request)
                 self.loginfo("Object {} successfully destroyed.".format(actor_id))
             self.global_sensors = []
 
             # destroy player
             for player_id in self.players:
-                destroy_object_request = cybercomp.get_service_request(DestroyObject)
+                destroy_object_request = DestroyObjectRequest()
                 destroy_object_request.id = player_id
                 self.call_service(self.destroy_object_service,
-                                  destroy_object_request, timeout=0.5, spin_until_response_received=True)
+                                  destroy_object_request)
                 self.loginfo("Object {} successfully destroyed.".format(player_id))
             self.players = []
         except ServiceException:
@@ -367,7 +367,6 @@ def main(args=None):
     spawn_objects_node = None
     try:
         spawn_objects_node = CarlaSpawnObjects()
-        cybercomp.on_shutdown(spawn_objects_node.destroy)
     except KeyboardInterrupt:
         cybercomp.logerr("Could not initialize CarlaSpawnObjects. Shutting down.")
 
@@ -384,7 +383,9 @@ def main(args=None):
         except RuntimeError as e:
             cybercomp.logfatal("Exception caught: {}".format(e))
         finally:
-            cybercomp.shutdown()
+            cybercomp.logwarn("Shutting down.")
+            spawn_objects_node.destroy()
+            cybercomp.waitforshutdown()
 
 
 if __name__ == '__main__':

@@ -28,11 +28,10 @@ def ok():
     return not cyber.is_shutdown()
 
 def shutdown():
-    pass
+    cyber.shutdown()
 
-def on_shutdown(hook):
-    # cyber.on_shutdown(hook)
-    pass
+def waitforshutdown():
+    cyber.waitforshutdown()
 
 def get_timestamp(sec=0, nsec=0, from_sec=False):
     total = 0

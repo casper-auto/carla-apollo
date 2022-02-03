@@ -77,17 +77,5 @@ class CompatibleNode(object):
     def spin(self):
         self.node.spin()
 
-    def destroy_service(self, service):
-        # service.shutdown()
-        pass
-
-    def destroy_reader(self, reader):
-        # reader.unregister()
-        pass
-
-    def destroy_writer(self, writer):
-        # writer.unregister()
-        pass
-
     def destroy(self):
-        pass
+        del self.node

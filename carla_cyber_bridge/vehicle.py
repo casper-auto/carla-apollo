@@ -35,7 +35,7 @@ class Vehicle(TrafficParticipant):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         :param carla_actor: carla vehicle actor object
         :type carla_actor: carla.Vehicle
         """

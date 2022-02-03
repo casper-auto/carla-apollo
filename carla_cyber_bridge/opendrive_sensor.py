@@ -31,7 +31,7 @@ class OpenDriveSensor(PseudoActor):
         :param parent: the parent of this
         :type parent: carla_cyber_bridge.Parent
         :param node: node-handle
-        :type node: carla_cyber_bridge.CarlaRosBridge
+        :type node: carla_cyber_bridge.CarlaCyberBridge
         :param carla_map: carla map object
         :type carla_map: carla.Map
         """
@@ -48,7 +48,6 @@ class OpenDriveSensor(PseudoActor):
 
     def destroy(self):
         super(OpenDriveSensor, self).destroy()
-        self.node.destroy_writer(self.map_writer)
 
     @staticmethod
     def get_blueprint_name():
