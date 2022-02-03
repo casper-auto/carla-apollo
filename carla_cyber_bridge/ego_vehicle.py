@@ -26,7 +26,7 @@ from cyber.carla_bridge.carla_proto.proto.carla_ego_vehicle_pb2 import (
 )
 from cyber.carla_bridge.carla_proto.proto.carla_marker_pb2 import ColorRGBA
 
-from modules.localization.proto.localization_pb2 import LocalizationEstimate
+from modules.localization.proto.localization_pb2 import LocalizationEstimate, LocalizationStatus
 from modules.localization.proto.gps_pb2 import Gps
 from modules.canbus.proto.chassis_pb2 import Chassis
 from modules.control.proto.control_cmd_pb2 import ControlCommand
@@ -78,6 +78,10 @@ class EgoVehicle(Vehicle):
         self.vehicle_pose_writer = node.new_writer(
             "/apollo/localization/pose",
             LocalizationEstimate,
+            qos_depth=10)
+        self.localization_status_writer = node.new_writer(
+            "/apollo/localization/msf_status",
+            LocalizationStatus,
             qos_depth=10)
         self.tf_writer = node.new_writer("/tf", TransformStampeds)
 
@@ -194,6 +198,13 @@ class EgoVehicle(Vehicle):
         vehicle_pose = LocalizationEstimate(header=self.get_msg_header("novatel", timestamp=timestamp))
         vehicle_pose.pose.CopyFrom(self.get_current_cyber_pose())
         self.vehicle_pose_writer.write(vehicle_pose)
+
+        localization_status = LocalizationStatus()
+        localization_status.header.timestamp_sec = self.node.get_time()
+        localization_status.fusion_status = 0  # OK = 0
+        localization_status.measurement_time = self.node.get_time()
+        localization_status.state_message = ""
+        self.localization_status_writer.write(localization_status)
 
         tf_stampeds = TransformStampeds()
         tf_stampeds.transforms.append(self.get_tf_msg())

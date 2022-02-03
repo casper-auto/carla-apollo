@@ -15,6 +15,7 @@ import carla_common.transforms as trans
 from carla_cyber_bridge.sensor import Sensor
 
 from modules.drivers.gnss.proto.gnss_best_pose_pb2 import GnssBestPose
+from modules.drivers.gnss.proto.gnss_status_pb2 import GnssStatus
 from modules.drivers.gnss.proto.heading_pb2 import Heading
 from modules.localization.proto.gps_pb2 import Gps
 
@@ -61,6 +62,9 @@ class Gnss(Sensor):
         self.gnss_heading_writer = node.new_writer(self.get_topic_prefix() + "/heading",
                                            Heading,
                                            qos_depth=10)
+        self.gnss_status_writer = node.new_writer(self.get_topic_prefix() + "/gnss_status",
+                                           GnssStatus,
+                                           qos_depth=10)
         self.listen()
 
     def destroy(self):
@@ -102,3 +106,12 @@ class Gnss(Sensor):
         roll, pitch, yaw = trans.carla_rotation_to_RPY(self.carla_actor.get_transform().rotation)
         gnss_heading_msg.heading = yaw
         self.gnss_odometry_writer.write(gnss_heading_msg)
+
+        gnss_status_msg = GnssStatus()
+        gnss_status_msg.header.timestamp_sec = carla_gnss_measurement.timestamp
+        gnss_status_msg.header.module_name = "gnss"
+        gnss_status_msg.solution_completed = True
+        gnss_status_msg.solution_status = 0
+        gnss_status_msg.position_type = 56
+        gnss_status_msg.num_sats = 3
+        self.gnss_status_writer.write(gnss_status_msg)
