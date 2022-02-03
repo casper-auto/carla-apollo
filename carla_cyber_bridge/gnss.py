@@ -10,9 +10,12 @@
 Classes to handle Carla gnsss
 """
 
-from .sensor import Sensor
+import carla_common.transforms as trans
+
+from carla_cyber_bridge.sensor import Sensor
 
 from modules.drivers.gnss.proto.gnss_best_pose_pb2 import GnssBestPose
+from modules.drivers.gnss.proto.heading_pb2 import Heading
 from modules.localization.proto.gps_pb2 import Gps
 
 
@@ -49,11 +52,14 @@ class Gnss(Sensor):
                                    carla_actor=carla_actor,
                                    synchronous_mode=synchronous_mode)
 
-        self.gnss_navsatfix_writer = node.new_writer("/apollo/sensor/gnss/fix",
+        self.gnss_navsatfix_writer = node.new_writer(self.get_topic_prefix() + "/best_pose",
                                            GnssBestPose,
                                            qos_depth=10)
-        self.gnss_odometry_writer = node.new_writer("/apollo/sensor/gnss/odometry",
+        self.gnss_odometry_writer = node.new_writer(self.get_topic_prefix() + "/odometry",
                                            Gps,
+                                           qos_depth=10)
+        self.gnss_heading_writer = node.new_writer(self.get_topic_prefix() + "/heading",
+                                           Heading,
                                            qos_depth=10)
         self.listen()
 
@@ -61,6 +67,15 @@ class Gnss(Sensor):
         super(Gnss, self).destroy()
         self.node.destroy_writer(self.gnss_status_writer)
         self.node.destroy_writer(self.gnss_odometry_writer)
+
+    def get_topic_prefix(self):
+        """
+        get the topic name of the current entity.
+
+        :return: the final topic name of this object
+        :rtype: string
+        """
+        return "/apollo/sensor/" + self.name
 
     def sensor_data_updated(self, carla_gnss_measurement):
         """
@@ -80,3 +95,10 @@ class Gnss(Sensor):
         gnss_odometry_msg.header.CopyFrom(self.get_msg_header(timestamp=carla_gnss_measurement.timestamp))
         gnss_odometry_msg.localization.CopyFrom(self.parent.get_current_cyber_pose())
         self.gnss_odometry_writer.write(gnss_odometry_msg)
+
+        gnss_heading_msg = Heading()
+        gnss_heading_msg.header.CopyFrom(self.get_msg_header(timestamp=carla_gnss_measurement.timestamp))
+        gnss_heading_msg.measurement_time = self.node.get_time()
+        roll, pitch, yaw = trans.carla_rotation_to_RPY(self.carla_actor.get_transform().rotation)
+        gnss_heading_msg.heading = yaw
+        self.gnss_odometry_writer.write(gnss_heading_msg)

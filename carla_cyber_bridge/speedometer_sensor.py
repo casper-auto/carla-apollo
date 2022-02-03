@@ -41,13 +41,22 @@ class SpeedometerSensor(PseudoActor):
                                                 parent=parent,
                                                 node=node)
 
-        self.speedometer_writer = node.new_writer("/apollo/sensor/speedometer",
+        self.speedometer_writer = node.new_writer(self.get_topic_prefix(),
                                                   FloatValue,
                                                   qos_depth=10)
 
     def destroy(self):
         super(SpeedometerSensor, self).destroy()
         self.node.destroy_writer(self.speedometer_writer)
+
+    def get_topic_prefix(self):
+        """
+        get the topic name of the current entity.
+
+        :return: the final topic name of this object
+        :rtype: string
+        """
+        return "/apollo/sensor/" + self.name
 
     @staticmethod
     def get_blueprint_name():

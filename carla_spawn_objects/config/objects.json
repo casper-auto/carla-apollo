@@ -64,7 +64,7 @@
                 },
                 {
                     "type": "sensor.other.radar",
-                    "id": "radar_front",
+                    "id": "radar/front",
                     "spawn_point": {"x": 2.0, "y": 0.0, "z": 2.0, "roll": 0.0, "pitch": 0.0, "yaw": 0.0},
                     "horizontal_fov": 30.0,
                     "vertical_fov": 10.0,
@@ -88,7 +88,7 @@
                 },
                 {
                     "type": "sensor.other.imu",
-                    "id": "imu",
+                    "id": "gnss/imu",
                     "spawn_point": {"x": 2.0, "y": 0.0, "z": 2.0, "roll": 0.0, "pitch": 0.0, "yaw": 0.0},
                     "noise_accel_stddev_x": 0.0, "noise_accel_stddev_y": 0.0, "noise_accel_stddev_z": 0.0,
                     "noise_gyro_stddev_x": 0.0, "noise_gyro_stddev_y": 0.0, "noise_gyro_stddev_z": 0.0,

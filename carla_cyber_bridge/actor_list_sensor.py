@@ -12,7 +12,6 @@ handle a actor list sensor
 from carla_cyber_bridge.actor import Actor
 from carla_cyber_bridge.pseudo_actor import PseudoActor
 
-# from carla_msgs.msg import CarlaActorList, CarlaActorInfo
 from cyber.carla_bridge.carla_proto.proto.carla_actor_pb2 import CarlaActorInfo, CarlaActorList
 
 

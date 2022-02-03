@@ -49,12 +49,21 @@ class ImuSensor(Sensor):
                                         carla_actor=carla_actor,
                                         synchronous_mode=synchronous_mode)
 
-        self.imu_writer = node.new_writer("/apollo/sensor/imu", Imu, qos_depth=10)
+        self.imu_writer = node.new_writer(self.get_topic_prefix(), Imu, qos_depth=10)
         self.listen()
 
     def destroy(self):
         super(ImuSensor, self).destroy()
         self.node.destroy_writer(self.imu_writer)
+
+    def get_topic_prefix(self):
+        """
+        get the topic name of the current entity.
+
+        :return: the final topic name of this object
+        :rtype: string
+        """
+        return "/apollo/sensor/" + self.name
 
     # pylint: disable=arguments-differ
     def sensor_data_updated(self, carla_imu_measurement):
