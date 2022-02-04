@@ -13,7 +13,7 @@ from carla_cyber_bridge.pseudo_actor import PseudoActor
 from carla_cyber_bridge.vehicle import Vehicle
 from carla_cyber_bridge.walker import Walker
 
-from cyber.carla_bridge.carla_proto.proto.carla_object_pb2 import ObjectList
+from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle, PerceptionObstacles
 
 
 class ObjectSensor(PseudoActor):
@@ -43,8 +43,8 @@ class ObjectSensor(PseudoActor):
                                            parent=parent,
                                            node=node)
         self.actor_list = actor_list
-        self.object_writer = node.new_writer("/apollo" + self.get_topic_prefix(),
-                                             ObjectList,
+        self.object_writer = node.new_writer(self.get_topic_prefix(),
+                                             PerceptionObstacles,
                                              qos_depth=10)
 
     def destroy(self):
@@ -54,6 +54,15 @@ class ObjectSensor(PseudoActor):
         """
         super(ObjectSensor, self).destroy()
         self.actor_list = None
+
+    def get_topic_prefix(self):
+        """
+        get the topic name of the current entity.
+
+        :return: the final topic name of this object
+        :rtype: string
+        """
+        return "/apollo/perception/" + self.name
 
     @staticmethod
     def get_blueprint_name():
@@ -70,7 +79,7 @@ class ObjectSensor(PseudoActor):
         - tf global frame
         :return:
         """
-        cyber_objects = ObjectList()
+        cyber_objects = PerceptionObstacles()
         cyber_objects.header.CopyFrom(self.get_msg_header(frame_id="map", timestamp=timestamp))
         for actor_id in self.actor_list.keys():
             # currently only Vehicles and Walkers are added to the object array

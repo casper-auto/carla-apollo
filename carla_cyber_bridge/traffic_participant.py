@@ -14,9 +14,9 @@ import carla_common.transforms as trans
 
 from carla_cyber_bridge.actor import Actor
 
-from cyber.carla_bridge.carla_proto.proto.carla_object_pb2 import Object
 from cyber.carla_bridge.carla_proto.proto.carla_geometry_pb2 import SolidPrimitive
 from cyber.carla_bridge.carla_proto.proto.carla_marker_pb2 import ColorRGBA, Marker, MarkerList
+from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle
 
 
 class TrafficParticipant(Actor):
@@ -69,28 +69,34 @@ class TrafficParticipant(Actor):
 
         :return:
         """
-        obj = Object(header=self.get_msg_header("map"))
+        obj = PerceptionObstacle()
         # ID
         obj.id = self.get_id()
-        # Pose
-        obj.pose.CopyFrom(self.get_current_cyber_pose())
-        # Twist
-        obj.twist.CopyFrom(self.get_current_cyber_twist())
+        # Position
+        carla_transform = self.carla_actor.get_transform()
+        obj.position.x = carla_transform.location.x
+        obj.position.y = -carla_transform.location.y
+        obj.position.z = carla_transform.location.z
+        # Theta
+        obj.theta = -math.radians(carla_transform.rotation.yaw)
+        # Velocity
+        carla_velocity = self.carla_actor.get_velocity()
+        obj.velocity.x = carla_velocity.x
+        obj.velocity.y = -carla_velocity.y
+        obj.velocity.z = carla_velocity.z
         # Acceleration
-        obj.accel.CopyFrom(self.get_current_cyber_accel())
+        carla_accel = self.carla_actor.get_acceleration()
+        obj.acceleration.x = carla_accel.x
+        obj.acceleration.y = -carla_accel.y
+        obj.acceleration.z = carla_accel.z
         # Shape
-        obj.shape.type = SolidPrimitive.BOX
-        obj.shape.dimensions.extend([
-            self.carla_actor.bounding_box.extent.x * 2.0,
-            self.carla_actor.bounding_box.extent.y * 2.0,
-            self.carla_actor.bounding_box.extent.z * 2.0])
+        obj.length = self.carla_actor.bounding_box.extent.x * 2.0
+        obj.width = self.carla_actor.bounding_box.extent.y * 2.0
+        obj.height = self.carla_actor.bounding_box.extent.z * 2.0
 
         # Classification if available in attributes
         if self.get_classification() != Object.Classification.UNKNOWN:
-            obj.object_classified = True
-            obj.classification = self.get_classification()
-            obj.classification_certainty = 255
-            obj.classification_age = self.classification_age
+            obj.type = self.get_classification()
 
         return obj
 
@@ -98,7 +104,7 @@ class TrafficParticipant(Actor):
         """
         Function to get object classification (overridden in subclasses)
         """
-        return Object.Classification.UNKNOWN
+        return PerceptionObstacle.UNKNOWN
 
     def get_marker_color(self):  # pylint: disable=no-self-use
         """

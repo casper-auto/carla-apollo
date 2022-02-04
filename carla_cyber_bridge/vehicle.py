@@ -14,8 +14,8 @@ import carla_common.transforms as trans
 
 from carla_cyber_bridge.traffic_participant import TrafficParticipant
 
-from cyber.carla_bridge.carla_proto.proto.carla_object_pb2 import Object
 from cyber.carla_bridge.carla_proto.proto.carla_marker_pb2 import ColorRGBA
+from modules.perception.proto.perception_obstacle_pb2 import PerceptionObstacle
 
 
 class Vehicle(TrafficParticipant):
@@ -39,18 +39,18 @@ class Vehicle(TrafficParticipant):
         :param carla_actor: carla vehicle actor object
         :type carla_actor: carla.Vehicle
         """
-        self.classification = Object.Classification.CAR
+        self.classification = PerceptionObstacle.VEHICLE
         if 'object_type' in carla_actor.attributes:
             if carla_actor.attributes['object_type'] == 'car':
-                self.classification = Object.Classification.CAR
+                self.classification = PerceptionObstacle.VEHICLE
             elif carla_actor.attributes['object_type'] == 'bike':
-                self.classification = Object.Classification.BIKE
+                self.classification = PerceptionObstacle.BICYCLE
             elif carla_actor.attributes['object_type'] == 'motorcycle':
-                self.classification = Object.Classification.MOTORCYCLE
+                self.classification = PerceptionObstacle.BICYCLE
             elif carla_actor.attributes['object_type'] == 'truck':
-                self.classification = Object.Classification.TRUCK
+                self.classification = PerceptionObstacle.VEHICLE
             elif carla_actor.attributes['object_type'] == 'other':
-                self.classification = Object.Classification.OTHER_VEHICLE
+                self.classification = PerceptionObstacle.UNKNOWN_MOVABLE
 
         super(Vehicle, self).__init__(uid=uid,
                                       name=name,
