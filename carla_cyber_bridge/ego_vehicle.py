@@ -195,9 +195,32 @@ class EgoVehicle(Vehicle):
 
         self.vehicle_info_writer.write(vehicle_info)
 
-        vehicle_pose = LocalizationEstimate(header=self.get_msg_header("novatel", timestamp=timestamp))
-        vehicle_pose.pose.CopyFrom(self.get_current_cyber_pose())
-        self.vehicle_pose_writer.write(vehicle_pose)
+        '''
+        Mock locaization estimate.
+        '''
+
+        transform = self.carla_actor.get_transform()
+        linear_vel = self.carla_actor.get_velocity()
+        angular_vel = self.carla_actor.get_angular_velocity()
+        accel = self.carla_actor.get_acceleration()
+
+        localization_estimate = LocalizationEstimate()
+        localization_estimate.header.timestamp_sec = self.node.get_time()
+        localization_estimate.header.frame_id = 'novatel'
+        localization_estimate.pose.position.x = transform.location.x
+        localization_estimate.pose.position.y = -transform.location.y
+        localization_estimate.pose.position.z = transform.location.z
+        localization_estimate.pose.linear_velocity.x = linear_vel.x
+        localization_estimate.pose.linear_velocity.y = linear_vel.y
+        localization_estimate.pose.linear_velocity.z = linear_vel.z
+        localization_estimate.pose.angular_velocity_vrf.x = angular_vel.x
+        localization_estimate.pose.angular_velocity_vrf.y = angular_vel.y
+        localization_estimate.pose.angular_velocity_vrf.z = angular_vel.z
+        localization_estimate.pose.linear_acceleration_vrf.x = accel.x
+        localization_estimate.pose.linear_acceleration_vrf.y = accel.y
+        localization_estimate.pose.linear_acceleration_vrf.z = accel.z
+        localization_estimate.pose.heading = math.radians(-transform.rotation.yaw)
+        self.vehicle_pose_writer.write(localization_estimate)
 
         localization_status = LocalizationStatus()
         localization_status.header.timestamp_sec = self.node.get_time()
