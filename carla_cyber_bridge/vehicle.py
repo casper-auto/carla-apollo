@@ -39,18 +39,18 @@ class Vehicle(TrafficParticipant):
         :param carla_actor: carla vehicle actor object
         :type carla_actor: carla.Vehicle
         """
-        self.classification = Object.CLASSIFICATION_CAR
+        self.classification = Object.Classification.CAR
         if 'object_type' in carla_actor.attributes:
             if carla_actor.attributes['object_type'] == 'car':
-                self.classification = Object.CLASSIFICATION_CAR
+                self.classification = Object.Classification.CAR
             elif carla_actor.attributes['object_type'] == 'bike':
-                self.classification = Object.CLASSIFICATION_BIKE
+                self.classification = Object.Classification.BIKE
             elif carla_actor.attributes['object_type'] == 'motorcycle':
-                self.classification = Object.CLASSIFICATION_MOTORCYCLE
+                self.classification = Object.Classification.MOTORCYCLE
             elif carla_actor.attributes['object_type'] == 'truck':
-                self.classification = Object.CLASSIFICATION_TRUCK
+                self.classification = Object.Classification.TRUCK
             elif carla_actor.attributes['object_type'] == 'other':
-                self.classification = Object.CLASSIFICATION_OTHER_VEHICLE
+                self.classification = Object.Classification.OTHER_VEHICLE
 
         super(Vehicle, self).__init__(uid=uid,
                                       name=name,

@@ -15,19 +15,19 @@ message Object {
     OBJECT_TRACKED                = 1;
   };
 
-  enum ObjectClassification {
-    CLASSIFICATION_UNKNOWN        = 0;
-    CLASSIFICATION_UNKNOWN_SMALL  = 1;
-    CLASSIFICATION_UNKNOWN_MEDIUM = 2;
-    CLASSIFICATION_UNKNOWN_BIG    = 3;
-    CLASSIFICATION_PEDESTRIAN     = 4;
-    CLASSIFICATION_BIKE           = 5;
-    CLASSIFICATION_CAR            = 6;
-    CLASSIFICATION_TRUCK          = 7;
-    CLASSIFICATION_MOTORCYCLE     = 8;
-    CLASSIFICATION_OTHER_VEHICLE  = 9;
-    CLASSIFICATION_BARRIER        = 10;
-    CLASSIFICATION_SIGN           = 11;
+  enum Classification {
+    UNKNOWN        = 0;
+    UNKNOWN_SMALL  = 1;
+    UNKNOWN_MEDIUM = 2;
+    UNKNOWN_BIG    = 3;
+    PEDESTRIAN     = 4;
+    BIKE           = 5;
+    CAR            = 6;
+    TRUCK          = 7;
+    MOTORCYCLE     = 8;
+    OTHER_VEHICLE  = 9;
+    BARRIER        = 10;
+    SIGN           = 11;
   };
 
   optional apollo.common.Header header = 1;
@@ -39,7 +39,7 @@ message Object {
   optional Accel accel = 7;
   optional apollo.common.Polygon polygon = 8;
   optional SolidPrimitive shape = 9;
-  optional ObjectClassification classification = 10;
+  optional Classification classification = 10;
   optional uint32 classification_certainty = 11;
   optional uint32 classification_age = 12;
 };

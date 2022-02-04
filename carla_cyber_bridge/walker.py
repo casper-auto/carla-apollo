@@ -14,8 +14,8 @@ from carla import WalkerControl
 
 from carla_cyber_bridge.traffic_participant import TrafficParticipant
 
-# from carla_msgs.msg import CarlaWalkerControl
-# from derived_object_msgs.msg import Object
+from cyber.carla_bridge.carla_proto.proto.carla_object_pb2 import Object
+from cyber.carla_bridge.carla_proto.proto.carla_walker_control_pb2 import CarlaWalkerControl
 
 
 class Walker(TrafficParticipant):
@@ -48,37 +48,36 @@ class Walker(TrafficParticipant):
         self.control_reader = self.node.new_reader(
             self.get_topic_prefix() + "/walker_control_cmd",
             CarlaWalkerControl,
-            self.control_command_updated,
-            qos_depth=10)
+            self.control_command_updated)
 
     def destroy(self):
         """
         Function (override) to destroy this object.
 
-        Terminate ROS readers
+        Terminate CyberRT readers
         Finally forward call to super class.
 
         :return:
         """
         super(Walker, self).destroy()
 
-    def control_command_updated(self, ros_walker_control):
+    def control_command_updated(self, cyber_walker_control):
         """
         Receive a CarlaWalkerControl msg and send to CARLA
-        This function gets called whenever a ROS message is received via
+        This function gets called whenever a CyberRT message is received via
         '/carla/<role name>/walker_control_cmd' topic.
-        The received ROS message is converted into carla.WalkerControl command and
+        The received CyberRT message is converted into carla.WalkerControl command and
         sent to CARLA.
-        :param ros_walker_control: current walker control input received via ROS
+        :param cyber_walker_control: current walker control input received via CyberRT
         :type self.info.output: carla_cyber_bridge.msg.CarlaWalkerControl
         :return:
         """
         walker_control = WalkerControl()
-        walker_control.direction.x = ros_walker_control.direction.x
-        walker_control.direction.y = -ros_walker_control.direction.y
-        walker_control.direction.z = ros_walker_control.direction.z
-        walker_control.speed = ros_walker_control.speed
-        walker_control.jump = ros_walker_control.jump
+        walker_control.direction.x = cyber_walker_control.direction.x
+        walker_control.direction.y = -cyber_walker_control.direction.y
+        walker_control.direction.z = cyber_walker_control.direction.z
+        walker_control.speed = cyber_walker_control.speed
+        walker_control.jump = cyber_walker_control.jump
         self.carla_actor.apply_control(walker_control)
 
     def get_classification(self):
@@ -86,4 +85,4 @@ class Walker(TrafficParticipant):
         Function (override) to get classification
         :return:
         """
-        return Object.CLASSIFICATION_PEDESTRIAN
+        return Object.Classification.PEDESTRIAN

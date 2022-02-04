@@ -86,7 +86,7 @@ class TrafficParticipant(Actor):
             self.carla_actor.bounding_box.extent.z * 2.0])
 
         # Classification if available in attributes
-        if self.get_classification() != Object.CLASSIFICATION_UNKNOWN:
+        if self.get_classification() != Object.Classification.UNKNOWN:
             obj.object_classified = True
             obj.classification = self.get_classification()
             obj.classification_certainty = 255
@@ -98,7 +98,7 @@ class TrafficParticipant(Actor):
         """
         Function to get object classification (overridden in subclasses)
         """
-        return Object.CLASSIFICATION_UNKNOWN
+        return Object.Classification.UNKNOWN
 
     def get_marker_color(self):  # pylint: disable=no-self-use
         """
