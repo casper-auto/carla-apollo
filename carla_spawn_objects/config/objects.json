@@ -27,22 +27,6 @@
                     "fov": 90.0
                 },
                 {
-                    "type": "sensor.camera.rgb",
-                    "id": "front_12mm",
-                    "spawn_point": {"x": 2.0, "y": 0.0, "z": 2.0, "roll": 0.0, "pitch": 0.0, "yaw": 0.0},
-                    "image_size_x": 800,
-                    "image_size_y": 600,
-                    "fov": 90.0
-                },
-                {
-                    "type": "sensor.camera.rgb",
-                    "id": "front_view",
-                    "spawn_point": {"x": -4.5, "y": 0.0, "z": 2.8, "roll": 0.0, "pitch": 20.0, "yaw": 0.0},
-                    "image_size_x": 800,
-                    "image_size_y": 600,
-                    "fov": 90.0
-                },
-                {
                     "type": "sensor.lidar.ray_cast",
                     "id": "lidar128",
                     "spawn_point": {"x": 0.0, "y": 0.0, "z": 2.4, "roll": 0.0, "pitch": 0.0, "yaw": 0.0},
@@ -64,14 +48,6 @@
                     "range": 100.0
                 },
                 {
-                    "type": "sensor.camera.depth",
-                    "id": "depth_front",
-                    "spawn_point": {"x": 2.0, "y": 0.0, "z": 2.0, "roll": 0.0, "pitch": 0.0, "yaw": 0.0},
-                    "fov": 90.0,
-                    "image_size_x": 400,
-                    "image_size_y": 70
-                },
-                {
                     "type": "sensor.other.gnss",
                     "id": "gnss",
                     "spawn_point": {"x": 1.0, "y": 0.0, "z": 2.0},
@@ -87,24 +63,12 @@
                     "noise_gyro_bias_x": 0.0, "noise_gyro_bias_y": 0.0, "noise_gyro_bias_z": 0.0
                 },
                 {
-                    "type": "sensor.pseudo.tf",
-                    "id": "tf"
-                },
-                {
                     "type": "sensor.pseudo.objects",
                     "id": "obstacles"
                 },
                 {
-                    "type": "sensor.pseudo.odom",
-                    "id": "odometry"
-                },
-                {
                     "type": "sensor.pseudo.speedometer",
                     "id": "speedometer"
-                },
-                {
-                    "type": "actor.pseudo.control",
-                    "id": "control"
                 }
             ]
         }
