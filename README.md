@@ -1,8 +1,8 @@
-# Carla Cyber Bridge
+# Carla Apollo
 
-For Carla Simulator (0.9.11) and Apollo-5.0.0.
+Running Apollo-5.0.0 in Carla Simulator (0.9.11).
 
-The "Carla Cyber Bridge" is a mimic of ["Carla ROS Bridge"](https://github.com/carla-simulator/ros-bridge.git). Carla ROS Bridge enables two-way communication between Carla Simulator and ROS. In a mimic way, the current package is to build communication between Carla Simulator and CyberRT which is used in Baidu Apollo stack.
+**Carla Apollo** or **Carla Cyber Bridge** is a mimic of ["Carla ROS Bridge"](https://github.com/carla-simulator/ros-bridge.git). Carla ROS Bridge enables two-way communication between Carla Simulator and ROS. In a mimic way, the current package is to build communication between Carla Simulator and CyberRT which is used in Baidu Apollo stack.
 
 CyberRT is a real-time middle-ware which is different from ROS. But other than that, the commonly used message exchanging mechanism is quite similar to that in ROS. For example, the "writer and reader" mechanism in CyberRTmechanism is a counterpart to the "publisher and subscriber" mechanism in ROS. In CyberRT, it also has its version "service and client". Based on those facts, we can mimic the ros bridge.  
 
