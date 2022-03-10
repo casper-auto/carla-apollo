@@ -10,6 +10,7 @@
 Classes to handle Carla traffic participants
 """
 
+import math
 import carla_common.transforms as trans
 
 from carla_cyber_bridge.actor import Actor
@@ -95,7 +96,7 @@ class TrafficParticipant(Actor):
         obj.height = self.carla_actor.bounding_box.extent.z * 2.0
 
         # Classification if available in attributes
-        if self.get_classification() != Object.Classification.UNKNOWN:
+        if self.get_classification() != PerceptionObstacle.Type.UNKNOWN:
             obj.type = self.get_classification()
 
         return obj
