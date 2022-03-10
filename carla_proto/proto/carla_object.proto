@@ -5,7 +5,6 @@ package apollo.cyber.carla_bridge.proto;
 import "cyber/carla_bridge/carla_proto/proto/carla_geometry.proto";
 import "modules/common/proto/header.proto";
 import "modules/common/proto/geometry.proto";
-import "modules/data/proto/frame.proto";
 import "modules/localization/proto/pose.proto";
 
 message Object {
