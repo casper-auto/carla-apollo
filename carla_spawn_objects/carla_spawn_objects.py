@@ -258,8 +258,9 @@ class CarlaSpawnObjects(CompatibleNode):
                         for attached_object in sensor_spec["attached_objects"]:
                             attached_objects.append(attached_object)
                         continue
-                    spawn_object_request.attributes.append(
-                        KeyValue(key=str(attribute), value=str(value)))
+                    attr = spawn_object_request.attributes.add()
+                    attr.key = str(attribute)
+                    attr.value = str(value)
 
                 response_id = self.spawn_object(spawn_object_request)
 

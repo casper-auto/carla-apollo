@@ -96,11 +96,11 @@ class Lidar(Sensor):
         point_cloud_msg.measurement_time = self.node.get_time()
 
         for lidar_point in lidar_data:
-            cyber_point = PointXYZIT()
-            cyber_point.x = lidar_point[0]
-            cyber_point.y = lidar_point[1]
-            cyber_point.z = lidar_point[2]
-            point_cloud_msg.point.append(cyber_point)
+            # cyber_point = PointXYZIT()
+            cyber_point = point_cloud_msg.point.add()
+            cyber_point.x = float(lidar_point[0])
+            cyber_point.y = float(lidar_point[1])
+            cyber_point.z = float(lidar_point[2])
 
         self.lidar_writer.write(point_cloud_msg)
 
@@ -182,10 +182,10 @@ class SemanticLidar(Sensor):
         point_cloud_msg.measurement_time = self.node.get_time()
 
         for lidar_point in lidar_data:
-            cyber_point = PointXYZIT()
-            cyber_point.x = lidar_point[0]
-            cyber_point.y = lidar_point[1]
-            cyber_point.z = lidar_point[2]
-            point_cloud_msg.point.append(cyber_point)
+            # cyber_point = PointXYZIT()
+            cyber_point = point_cloud_msg.point.add()
+            cyber_point.x = float(lidar_point[0])
+            cyber_point.y = float(lidar_point[1])
+            cyber_point.z = float(lidar_point[2])
 
         self.semantic_lidar_writer.write(point_cloud_msg)

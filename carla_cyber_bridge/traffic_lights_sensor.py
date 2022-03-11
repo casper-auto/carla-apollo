@@ -84,14 +84,16 @@ class TrafficLightsSensor(PseudoActor):
             actor = self.actor_list[actor_id]
             if isinstance(actor, TrafficLight):
                 traffic_light_actors.append(actor)
-                traffic_light_status.traffic_lights.append(actor.get_status())
+                status = traffic_light_status.traffic_lights.add()
+                status.CopyFrom(actor.get_status())
 
         # if traffic_light_actors != self.traffic_light_actors:
         self.traffic_light_actors = traffic_light_actors
         traffic_light_info_list = CarlaTrafficLightInfoList()
         tl_list = []
         for traffic_light in traffic_light_actors:
-            traffic_light_info_list.traffic_lights.append(traffic_light.get_info())
+            info = traffic_light_info_list.traffic_lights.add()
+            info.CopyFrom(traffic_light.get_info())
         self.traffic_lights_info_writer.write(traffic_light_info_list)
 
         # if traffic_light_status != self.traffic_light_status:

@@ -96,7 +96,7 @@ class TrafficParticipant(Actor):
         obj.height = self.carla_actor.bounding_box.extent.z * 2.0
 
         # Classification if available in attributes
-        if self.get_classification() != PerceptionObstacle.Type.UNKNOWN:
+        if self.get_classification() != PerceptionObstacle.UNKNOWN:
             obj.type = self.get_classification()
 
         return obj

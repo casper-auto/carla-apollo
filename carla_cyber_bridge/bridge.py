@@ -380,7 +380,7 @@ class CarlaCyberBridge(CompatibleNode):
         self.loginfo("Object update finished.")
         # self.debug_helper.destroy()
         self.status_writer.destroy()
-        self.carla_control_queue.put(CarlaControl.Command.STEP_ONCE)
+        self.carla_control_queue.put(CarlaControl.STEP_ONCE)
 
         for uid in self._registered_actors:
             self.actor_factory.destroy_actor(uid)

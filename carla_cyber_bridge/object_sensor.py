@@ -86,7 +86,9 @@ class ObjectSensor(PseudoActor):
             if self.parent is None or self.parent.uid != actor_id:
                 actor = self.actor_list[actor_id]
                 if isinstance(actor, Vehicle):
-                    cyber_objects.perception_obstacle.append(actor.get_object_info())
+                    info = cyber_objects.perception_obstacle.add()
+                    info.CopyFrom(actor.get_object_info())
                 elif isinstance(actor, Walker):
-                    cyber_objects.perception_obstacle.append(actor.get_object_info())
+                    info = cyber_objects.perception_obstacle.add()
+                    info.CopyFrom(actor.get_object_info())
         self.object_writer.write(cyber_objects)

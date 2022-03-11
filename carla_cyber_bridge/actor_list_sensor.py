@@ -74,7 +74,8 @@ class ActorListSensor(PseudoActor):
                 continue
 
             actor = self.actor_list[actor_id].carla_actor
-            carla_actor = CarlaActorInfo()
+
+            carla_actor = carla_actor_list.actors.add()
             carla_actor.id = actor.id
             carla_actor.type = actor.type_id
             try:
@@ -86,7 +87,5 @@ class ActorListSensor(PseudoActor):
                 carla_actor.parent_id = actor.parent.id
             else:
                 carla_actor.parent_id = 0
-
-            carla_actor_list.actors.append(carla_actor)
 
         self.actor_list_writer.write(carla_actor_list)

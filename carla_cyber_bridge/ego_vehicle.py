@@ -144,7 +144,7 @@ class EgoVehicle(Vehicle):
         vehicle_chassis.brake_percentage = self.carla_actor.get_control().brake * 100.0
         vehicle_chassis.steering_percentage = -self.carla_actor.get_control().steer * 100.0
         vehicle_chassis.parking_brake = self.carla_actor.get_control().hand_brake
-        vehicle_chassis.driving_mode = Chassis.DrivingMode.COMPLETE_AUTO_DRIVE
+        vehicle_chassis.driving_mode = Chassis.COMPLETE_AUTO_DRIVE
         self.vehicle_chassis_writer.write(vehicle_chassis)
 
         # only send vehicle once (in latched-mode)
@@ -157,7 +157,7 @@ class EgoVehicle(Vehicle):
         vehicle_physics = self.carla_actor.get_physics_control()
 
         for wheel in vehicle_physics.wheels:
-            wheel_info = CarlaEgoVehicleInfoWheel()
+            wheel_info = vehicle_info.wheels.add()
             wheel_info.tire_friction = wheel.tire_friction
             wheel_info.damping_rate = wheel.damping_rate
             wheel_info.max_steer_angle = math.radians(wheel.max_steer_angle)
@@ -174,7 +174,6 @@ class EgoVehicle(Vehicle):
             wheel_info.position.x = wheel_pos_in_ego_vehicle[0]
             wheel_info.position.y = -wheel_pos_in_ego_vehicle[1]
             wheel_info.position.z = wheel_pos_in_ego_vehicle[2]
-            vehicle_info.wheels.append(wheel_info)
 
         vehicle_info.max_rpm = vehicle_physics.max_rpm
         vehicle_info.max_rpm = vehicle_physics.max_rpm
@@ -230,7 +229,8 @@ class EgoVehicle(Vehicle):
         self.localization_status_writer.write(localization_status)
 
         tf_stampeds = TransformStampeds()
-        tf_stampeds.transforms.append(self.get_tf_msg())
+        msg = tf_stampeds.transforms.add()
+        msg.CopyFrom(self.get_tf_msg())
         self.tf_writer.write(tf_stampeds)
 
     def update(self, frame, timestamp):
