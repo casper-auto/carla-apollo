@@ -60,7 +60,7 @@ In Terminal 1:
 
 ```
 # run in carla-cyber container:
-cd /apollo/carla_bridge
+cd /apollo/cyber/carla_bridge
 python carla_cyber_bridge/bridge.py
 ```
 
@@ -68,7 +68,7 @@ In Terminal 2:
 
 ```
 # run in carla-cyber container
-cd /apollo/carla_bridge
+cd /apollo/cyber/carla_bridge
 python carla_spawn_object/carla_spawn_object.py
 ```
 
