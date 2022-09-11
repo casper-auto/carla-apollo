@@ -69,7 +69,7 @@ In Terminal 2:
 ```
 # run in carla-cyber container
 cd /apollo/cyber/carla_bridge
-python carla_spawn_object/carla_spawn_object.py
+python carla_spawn_objects/carla_spawn_objects.py
 ```
 
 ### Run Apollo Dreamview & modules
